@@ -19,7 +19,7 @@ export default function Input({
   const [isFocused, setIsFocused] = useState(false);
   const [isPasswordVisible, setIsPasswordVisible] = useState(false);
   return (
-    <div className="relative">
+    <div className="relative w-full">
       {placeholder && (
         <label
           className={`absolute pl-1 ${
