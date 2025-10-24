@@ -1,6 +1,9 @@
 "use client";
 
-import { type ReactNode } from "react";
+import { useState, type ReactNode } from "react";
+import { useRouter } from "next/navigation";
+import { montserrat } from "@/src/fonts/Montserrat";
+import Input from "@/src/components/Input";
 
 interface IndexClientProps {
   validateToken: (token: string) => Promise<boolean>;
@@ -9,5 +12,28 @@ interface IndexClientProps {
 export default function IndexClient({
   validateToken,
 }: IndexClientProps): ReactNode {
-  return <></>;
+  const router = useRouter();
+  const [token, setToken] = useState<string>("");
+
+  const handleTokenChange = async (value: string) => {
+    setToken(value);
+    const isValid: boolean = await validateToken(value);
+    if (isValid) router.push("/home");
+  };
+
+  return (
+    <main
+      style={montserrat.style}
+      className="flex flex-row items-center container mx-auto h-screen max-w-4xl"
+    >
+      <div className="flex flex-col items-center w-full gap-4">
+        <Input
+          type="password"
+          placeholder="Password"
+          value={token}
+          onChange={(value) => setToken(value)}
+        />
+      </div>
+    </main>
+  );
 }
