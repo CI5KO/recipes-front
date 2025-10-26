@@ -28,7 +28,7 @@ export default function IndexClient({
       style={montserrat.style}
       className="grid items-center justify-items-center container mx-auto h-screen max-w-4xl"
     >
-      <div className="flex flex-row gap-4 w-1/3">
+      <div className="flex flex-row gap-4 w-3/4 md:w-1/2">
         <Input
           type="password"
           placeholder="Password"
