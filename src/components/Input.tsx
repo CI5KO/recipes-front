@@ -22,9 +22,9 @@ export default function Input({
     <div className="relative w-full">
       {placeholder && (
         <label
-          className={`absolute pl-1 ${
+          className={`absolute ml-1 ${
             isFocused || value ? "-top-3" : "top-[10px]"
-          } bg-gradient-to-t from-20% from-gray-300 via-60% via-transparent to-transparent text-sm left-2 transition-all select-none`}
+          } text-sm left-2 transition-all select-none bg-gradient-to-t from-gray-300 from-50% to-50% to-transparent`}
         >
           {placeholder}
         </label>
@@ -35,7 +35,7 @@ export default function Input({
         onFocus={() => setIsFocused(true)}
         onBlur={() => setIsFocused(false)}
         onChange={(e) => onChange(e.target.value)}
-        className="rounded-lg border border-pink-500 p-2 w-full bg-gray-300"
+        className="rounded-lg border border-pink-500 focus:outline-none p-2 w-full bg-gray-300"
       />
       {type === "password" && (
         <div
