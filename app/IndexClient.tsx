@@ -6,6 +6,7 @@ import { montserrat } from "@/src/fonts/Montserrat";
 import Input from "@/src/components/Input";
 import Button from "@/src/components/Button";
 import { PiCookie } from "react-icons/pi";
+import Notification from "@/src/components/Notification";
 
 interface IndexClientProps {
   validateToken: (token: string) => Promise<boolean>;
@@ -16,11 +17,13 @@ export default function IndexClient({
 }: IndexClientProps): ReactNode {
   const router = useRouter();
   const [token, setToken] = useState<string>("");
+  const [showNotification, setShowNotification] = useState<boolean>(false);
 
   const handleTokenChange = async (value: string) => {
     setToken(value);
     const isValid: boolean = await validateToken(value);
     if (isValid) router.push("/home");
+    else setShowNotification(true);
   };
 
   return (
@@ -28,7 +31,19 @@ export default function IndexClient({
       style={montserrat.style}
       className="grid items-center justify-items-center container mx-auto h-screen max-w-4xl"
     >
-      <div className="flex flex-row gap-4 w-3/4 md:w-1/2">
+      <Notification
+        message="Invalid token. Please try again."
+        type="error"
+        isOpen={showNotification}
+        onClose={() => setShowNotification(false)}
+      />
+      <form
+        onSubmit={(event) => {
+          event.preventDefault();
+          handleTokenChange(token);
+        }}
+        className="flex flex-row gap-4 w-3/4 md:w-1/2"
+      >
         <Input
           type="password"
           placeholder="Password"
@@ -38,7 +53,7 @@ export default function IndexClient({
         <Button onClick={() => handleTokenChange(token)}>
           <PiCookie />
         </Button>
-      </div>
+      </form>
     </main>
   );
 }
