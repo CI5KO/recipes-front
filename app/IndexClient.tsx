@@ -3,10 +3,11 @@
 import { useState, type ReactNode } from "react";
 import { useRouter } from "next/navigation";
 import { montserrat } from "@/src/fonts/Montserrat";
-import Input from "@/src/components/Input";
-import Button from "@/src/components/Button";
+import Input from "@/src/components/atoms/Input";
+import Button from "@/src/components/atoms/Button";
 import { PiCookie } from "react-icons/pi";
-import Notification from "@/src/components/Notification";
+import Notification from "@/src/components/atoms/Notification";
+import ThemeSwitcher from "@/src/components/molecules/ThemeSwitcher";
 
 interface IndexClientProps {
   validateToken: (token: string) => Promise<boolean>;
@@ -42,7 +43,7 @@ export default function IndexClient({
           event.preventDefault();
           handleTokenChange(token);
         }}
-        className="flex flex-row gap-4 w-3/4 md:w-1/2"
+        className="flex flex-row items-center gap-2 w-3/4 md:w-1/2"
       >
         <Input
           type="password"
@@ -53,6 +54,7 @@ export default function IndexClient({
         <Button onClick={() => handleTokenChange(token)}>
           <PiCookie />
         </Button>
+        <ThemeSwitcher />
       </form>
     </main>
   );
