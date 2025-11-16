@@ -19,7 +19,7 @@ export default function Switch({
         event.preventDefault();
         onToggle();
       }}
-      className={`relative w-20 h-10 border rounded-lg transition-colors duration-300 overflow-hidden ${
+      className={`relative w-20 h-10 border rounded-lg transition-colors duration-300 cursor-pointer overflow-hidden ${
         isOn ? "bg-pink-300 border-pink-500" : "bg-gray-300 border-gray-500"
       }`}
     >
