@@ -20,9 +20,8 @@ export default function IndexClient({
   const [token, setToken] = useState<string>("");
   const [showNotification, setShowNotification] = useState<boolean>(false);
 
-  const handleTokenChange = async (value: string) => {
-    setToken(value);
-    const isValid: boolean = await validateToken(value);
+  const handleSubmit = async () => {
+    const isValid: boolean = await validateToken(token);
     if (isValid) router.push("/home");
     else setShowNotification(true);
   };
@@ -30,7 +29,7 @@ export default function IndexClient({
   return (
     <main
       style={montserrat.style}
-      className="grid items-center justify-items-center container mx-auto h-screen max-w-4xl"
+      className="grid items-center justify-items-center container mx-auto h-screen max-w-4xl text-stone-800 dark:text-stone-200"
     >
       <Notification
         message="Invalid token. Please try again."
@@ -39,10 +38,7 @@ export default function IndexClient({
         onClose={() => setShowNotification(false)}
       />
       <form
-        onSubmit={(event) => {
-          event.preventDefault();
-          handleTokenChange(token);
-        }}
+        action={handleSubmit}
         className="flex flex-row items-center gap-2 w-3/4 md:w-1/2"
       >
         <Input
@@ -51,7 +47,7 @@ export default function IndexClient({
           value={token}
           onChange={(value) => setToken(value)}
         />
-        <Button onClick={() => handleTokenChange(token)}>
+        <Button type="submit">
           <PiCookie />
         </Button>
         <ThemeSwitcher />

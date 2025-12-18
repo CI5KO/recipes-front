@@ -19,8 +19,10 @@ export default function Switch({
         event.preventDefault();
         onToggle();
       }}
-      className={`relative w-20 h-10 border rounded-lg transition-colors duration-300 cursor-pointer overflow-hidden ${
-        isOn ? "bg-pink-300 border-pink-500" : "bg-gray-300 border-gray-500"
+      className={`relative w-16 h-10 border rounded-lg transition-colors duration-300 cursor-pointer overflow-hidden ${
+        isOn
+          ? "bg-complementary border-pink-500 dark:border-pink-700 dark:bg-complementary-dark"
+          : "bg-gray-300 border-gray-500 dark:border-gray-700 dark:bg-gray-600"
       }`}
     >
       <div className="relative w-full h-full flex items-center">
