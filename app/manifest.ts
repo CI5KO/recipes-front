@@ -2,9 +2,9 @@ import type { MetadataRoute } from "next";
 
 export default function manifest(): MetadataRoute.Manifest {
   return {
-    name: "Cookin Cat",
+    name: "Cooking Cat",
     short_name: "CC",
-    description: "Cookin Cat - Your personal recipe manager",
+    description: "Cooking Cat - Your personal recipe manager",
     start_url: "/",
     display: "standalone",
     background_color: "#ffffff",
