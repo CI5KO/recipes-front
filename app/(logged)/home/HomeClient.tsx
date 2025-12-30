@@ -17,47 +17,52 @@ export default function HomeClient() {
   }, []);
 
   return (
-    <div className="p-6">
-      <div className="mb-8">
-        <Link href="/recipes" className="text-2xl font-semibold mb-4">
+    <div className="grid gap-4 p-6">
+      <section>
+        <Link href="/recipes" className="text-2xl font-semibold">
           Recetas
         </Link>
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 pt-2">
           {recipes.map((recipe) => (
-            <div key={recipe.id} className="border rounded-lg p-4 shadow">
+            <Link
+              key={recipe.id}
+              href={`/recipes/${recipe.id}`}
+              className="border rounded-lg p-4 shadow hover:shadow-lg transition"
+            >
               <h3 className="font-semibold text-lg">{recipe.name}</h3>
-              <p className="text-gray-600 text-sm">{recipe.description}</p>
+              <p className="text-gray-600 dark:text-gray-400 text-sm">
+                {recipe.description}
+              </p>
               <p className="text-sm mt-2">
                 Tiempo: {recipe.preparationTime} min
               </p>
-            </div>
+            </Link>
           ))}
         </div>
-      </div>
-
-      <div className="mb-8">
-        <Link href="/ingredients" className="text-2xl font-semibold mb-4">
+      </section>
+      <section>
+        <Link href="/ingredients" className="text-2xl font-semibold">
           Ingredientes
         </Link>
-        <div className="border rounded-lg p-4">
-          <ul className="space-y-2">
-            {ingredients.map((ingredient) => (
-              <li key={ingredient.id} className="flex justify-between">
-                <span>{ingredient.name}</span>
-                <span className="text-gray-600">
-                  {ingredient.unitOfMeasure} - ${ingredient.pricePerUnit}
-                </span>
-              </li>
-            ))}
-          </ul>
-        </div>
-      </div>
-
-      <div>
-        <Link href="/tags" className="text-2xl font-semibold mb-4">
+        <ul className="space-y-2 pt-2">
+          {ingredients.map((ingredient) => (
+            <li
+              key={ingredient.id}
+              className="flex justify-between border rounded-lg p-4"
+            >
+              <span>{ingredient.name}</span>
+              <span className="text-gray-600 dark:text-gray-400">
+                {ingredient.unitOfMeasure} - ${ingredient.pricePerUnit}
+              </span>
+            </li>
+          ))}
+        </ul>
+      </section>
+      <section>
+        <Link href="/tags" className="text-2xl font-semibold">
           Tags
         </Link>
-        <div className="flex flex-wrap gap-2">
+        <div className="flex flex-wrap gap-2 pt-2">
           {tags.map((tag) => (
             <div
               key={tag.id}
@@ -71,7 +76,7 @@ export default function HomeClient() {
             </div>
           ))}
         </div>
-      </div>
+      </section>
     </div>
   );
 }

@@ -1,11 +1,13 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import { useRouter } from "next/navigation";
 import { Recipe, RecipeIngredient, Ingredient, Tag } from "@/src/types";
 import { storageUtils } from "@/src/lib/storage";
 import { createRecipe, updateRecipe, deleteRecipe } from "@/src/services/recipes.service";
 
 export default function RecipesClient() {
+  const router = useRouter();
   const [recipes, setRecipes] = useState<Recipe[]>([]);
   const [ingredients, setIngredients] = useState<Ingredient[]>([]);
   const [tags, setTags] = useState<Tag[]>([]);
@@ -114,7 +116,7 @@ export default function RecipesClient() {
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         {recipes.map(recipe => (
-          <div key={recipe.id} className="border rounded-lg p-4 shadow">
+          <div key={recipe.id} className="border rounded-lg p-4 shadow cursor-pointer hover:shadow-lg transition" onClick={() => router.push(`/recipes/${recipe.id}`)}>
             <h3 className="font-bold text-xl mb-2">{recipe.name}</h3>
             <p className="text-gray-600 mb-2">{recipe.description}</p>
             <div className="text-sm mb-2">
@@ -126,7 +128,7 @@ export default function RecipesClient() {
             <div className="mb-4">
               <strong>Tags:</strong> {recipe.tags.map(t => getTagName(t)).join(", ")}
             </div>
-            <div className="flex gap-2">
+            <div className="flex gap-2" onClick={(e) => e.stopPropagation()}>
               <button onClick={() => handleEdit(recipe)} className="bg-yellow-500 text-white px-3 py-1 rounded hover:bg-yellow-600">Editar</button>
               <button onClick={() => handleDelete(recipe.id)} className="bg-red-600 text-white px-3 py-1 rounded hover:bg-red-700">Eliminar</button>
             </div>
