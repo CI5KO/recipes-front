@@ -15,6 +15,8 @@ import Button from "@/src/components/atoms/Button";
 import TextArea from "@/src/components/atoms/TextArea";
 import Modal from "@/src/components/atoms/Modal";
 
+import { MdAdd, MdDelete } from "react-icons/md";
+
 export default function RecipesClient() {
   const router = useRouter();
   const [recipes, setRecipes] = useState<Recipe[]>([]);
@@ -195,7 +197,7 @@ export default function RecipesClient() {
           </h2>
           <form
             onSubmit={handleSubmit}
-            className="max-h-[70vh] overflow-y-auto space-y-4 mt-2"
+            className="max-h-[70vh] overflow-y-auto space-y-4 pt-4"
           >
             <Input
               placeholder="Nombre"
@@ -217,7 +219,7 @@ export default function RecipesClient() {
                 setFormData({ ...formData, instructions: value })
               }
             />
-            <div className="grid grid-cols-3 gap-4 ">
+            <div className="grid grid-cols-3 gap-4">
               <Input
                 placeholder="Tiempo (min)"
                 type="number"
@@ -252,67 +254,67 @@ export default function RecipesClient() {
                 }
               />
             </div>
-            <label className="block mb-2 text-black font-bold">
-              Ingredientes
-            </label>
+            <div className="flex flex-row w-full justify-center items-center">
+              <label className="block font-semibold mr-2">
+                Ingredientes ({formData.recipeIngredients.length})
+              </label>
+              <Button type="button" onClick={addIngredient}>
+                <MdAdd />
+              </Button>
+            </div>
             {formData.recipeIngredients.map((ri) => (
-              <div key={ri.id} className="flex gap-2 mb-2">
-                <select
-                  value={ri.ingredient}
-                  onChange={(e) =>
-                    updateIngredientField(ri.id, "ingredient", e.target.value)
-                  }
-                  className="flex-1 border rounded px-3 py-2 text-black"
-                  required
-                >
-                  <option value="">Seleccionar</option>
-                  {ingredients.map((ing) => (
-                    <option key={ing.id} value={ing.id}>
-                      {ing.name}
-                    </option>
-                  ))}
-                </select>
-                <input
-                  type="number"
-                  step="0.01"
-                  value={ri.quantity}
-                  onChange={(e) =>
-                    updateIngredientField(
-                      ri.id,
-                      "quantity",
-                      parseFloat(e.target.value)
-                    )
-                  }
-                  className="w-24 border rounded px-3 py-2 text-black"
-                  placeholder="Cant."
-                  required
-                />
-                <input
-                  type="text"
-                  value={ri.notes || ""}
-                  onChange={(e) =>
-                    updateIngredientField(ri.id, "notes", e.target.value)
-                  }
-                  className="flex-1 border rounded px-3 py-2 text-black"
-                  placeholder="Notas"
-                />
-                <button
-                  type="button"
-                  onClick={() => removeIngredient(ri.id)}
-                  className="bg-red-600 text-white px-3 py-1 rounded hover:bg-red-700"
-                >
-                  X
-                </button>
+              <div key={ri.id} className="flex flex-col md:flex-row gap-2 mb-4">
+                <div className="flex gap-2 w-fit">
+                  <select
+                    value={ri.ingredient}
+                    onChange={(e) =>
+                      updateIngredientField(ri.id, "ingredient", e.target.value)
+                    }
+                    className="border rounded px-3 py-2 w-1/2"
+                  >
+                    <option value="">Seleccionar</option>
+                    {ingredients.map((ing) => (
+                      <option key={ing.id} value={ing.id}>
+                        {ing.name}
+                      </option>
+                    ))}
+                  </select>
+                  <input
+                    type="number"
+                    step="0.01"
+                    value={ri.quantity}
+                    onChange={(e) =>
+                      updateIngredientField(
+                        ri.id,
+                        "quantity",
+                        parseFloat(e.target.value)
+                      )
+                    }
+                    className="border rounded px-3 py-2 w-1/2"
+                    placeholder="Cant."
+                  />
+                </div>
+                <div className="flex gap-2">
+                  <input
+                    type="text"
+                    value={ri.notes || ""}
+                    onChange={(e) =>
+                      updateIngredientField(ri.id, "notes", e.target.value)
+                    }
+                    className="border rounded px-3 py-2 w-4/5"
+                    placeholder="Notas"
+                  />
+                  <button
+                    type="button"
+                    onClick={() => removeIngredient(ri.id)}
+                    className="bg-red-600 text-white justify-items-center px-3 py-1 rounded hover:bg-red-700 w-1/5"
+                  >
+                    <MdDelete />
+                  </button>
+                </div>
               </div>
             ))}
-            <button
-              type="button"
-              onClick={addIngredient}
-              className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700"
-            >
-              Agregar Ingrediente
-            </button>
-            <label className="block mb-2 text-black font-bold">Tags</label>
+            <label className="block mb-2 font-semibold">Tags</label>
             <div className="flex flex-wrap gap-2">
               {tags.map((tag) => (
                 <button
@@ -322,7 +324,7 @@ export default function RecipesClient() {
                   className={`px-3 py-1 rounded ${
                     formData.tags.includes(tag.id)
                       ? "bg-blue-600 text-white"
-                      : "bg-gray-200 text-black"
+                      : "bg-gray-200"
                   }`}
                 >
                   {tag.name}

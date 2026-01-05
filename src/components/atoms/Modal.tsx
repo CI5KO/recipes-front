@@ -1,7 +1,7 @@
 "use client";
 
 import { useRef, type ReactNode } from "react";
-import { MdClose } from "react-icons/md";
+import { GiKnifeFork } from "react-icons/gi";
 
 interface ModalProps {
   children: ReactNode;
@@ -21,16 +21,16 @@ export default function Modal({ children, isOpen, onClose }: ModalProps) {
 
   return (
     <div
-      className="fixed inset-0 bg-primary-dark/75 dark:bg-primary/75 flex justify-center items-center"
+      className="fixed inset-0 bg-black/50 flex justify-center items-center"
       onClick={handleClickOutside}
     >
       <div
         ref={modalRef}
-        className="bg-primary dark:bg-primary-dark p-8 rounded-lg relative w-[90%] max-w-xl"
+        className="bg-primary dark:bg-primary-dark border border-complementary dark:border-complementary-dark p-8 rounded-lg relative w-[90%] max-w-xl"
       >
         {children}
-        <MdClose
-          className="absolute top-2 right-2 text-xl cursor-pointer"
+        <GiKnifeFork
+          className="absolute top-4 right-4 text-xl cursor-pointer hover:text-complementary dark:hover:text-complementary-dark"
           onClick={onClose}
         />
       </div>
