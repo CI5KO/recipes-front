@@ -14,8 +14,11 @@ import Input from "@/src/components/atoms/Input";
 import Button from "@/src/components/atoms/Button";
 import TextArea from "@/src/components/atoms/TextArea";
 import Modal from "@/src/components/atoms/Modal";
+import Select from "@/src/components/atoms/Select";
+import RecipeCard from "@/src/components/molecules/RecipeCard";
 
 import { MdAdd, MdDelete } from "react-icons/md";
+import { PiBowlFood } from "react-icons/pi";
 
 export default function RecipesClient() {
   const router = useRouter();
@@ -137,61 +140,30 @@ export default function RecipesClient() {
 
   return (
     <div className="p-6">
-      <div className="flex justify-between items-center mb-6">
-        <h1 className="text-3xl font-bold">Recetas</h1>
-        <button
-          onClick={() => setIsModalOpen(true)}
-          className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700"
-        >
-          Crear Receta
-        </button>
-      </div>
+      <button
+        onClick={() => setIsModalOpen(true)}
+        className="fixed bg-complementary dark:bg-complementary-dark rounded-full p-4 border border-black bottom-4 right-4 cursor-pointer"
+      >
+        <PiBowlFood className="text-2xl text-black" />
+      </button>
+      <h1 className="text-3xl font-bold pb-4">Recetas</h1>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
         {recipes.map((recipe) => (
-          <div
+          <RecipeCard
             key={recipe.id}
-            className="border rounded-lg p-4 shadow cursor-pointer hover:shadow-lg transition"
-            onClick={() => router.push(`/recipes/${recipe.id}`)}
-          >
-            <h3 className="font-bold text-xl mb-2">{recipe.name}</h3>
-            <p className="text-gray-600 mb-2">{recipe.description}</p>
-            <div className="text-sm mb-2">
-              <p>
-                Tiempo: {recipe.preparationTime} min | Dificultad:{" "}
-                {recipe.difficulty} | Porciones: {recipe.servings}
-              </p>
-            </div>
-            <div className="mb-2">
-              <strong>Ingredientes:</strong>{" "}
-              {recipe.recipeIngredients
-                .map((ri) => getIngredientName(ri.ingredient))
-                .join(", ")}
-            </div>
-            <div>
-              <strong>Tags:</strong>{" "}
-              {recipe.tags.map((t) => getTagName(t)).join(", ")}
-            </div>
-            <div className="flex gap-2" onClick={(e) => e.stopPropagation()}>
-              <button
-                onClick={() => handleEdit(recipe)}
-                className="bg-yellow-500 text-white px-3 py-1 rounded hover:bg-yellow-600"
-              >
-                Editar
-              </button>
-              <button
-                onClick={() => handleDelete(recipe.id)}
-                className="bg-red-600 text-white px-3 py-1 rounded hover:bg-red-700"
-              >
-                Eliminar
-              </button>
-            </div>
-          </div>
+            recipe={recipe}
+            onEdit={handleEdit}
+            onDelete={handleDelete}
+            onClick={(id) => router.push(`/recipes/${id}`)}
+            getIngredientName={getIngredientName}
+            getTagName={getTagName}
+          />
         ))}
       </div>
 
       {isModalOpen && (
-        <Modal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)}>
+        <Modal isOpen={isModalOpen} onClose={closeModal}>
           <h2 className="text-xl font-semibold">
             {editingRecipe ? "Editar" : "Crear"} Receta
           </h2>
@@ -231,9 +203,8 @@ export default function RecipesClient() {
                   })
                 }
               />
-              <Input
+              <Select
                 placeholder="Dificultad"
-                type="text"
                 value={formData.difficulty}
                 onChange={(value) =>
                   setFormData({
@@ -241,6 +212,11 @@ export default function RecipesClient() {
                     difficulty: value,
                   })
                 }
+                options={[
+                  { value: "Facil", label: "Facil" },
+                  { value: "Intermedio", label: "Intermedio" },
+                  { value: "Dificil", label: "Dificil" },
+                ]}
               />
               <Input
                 placeholder="Porciones"
@@ -265,44 +241,38 @@ export default function RecipesClient() {
             {formData.recipeIngredients.map((ri) => (
               <div key={ri.id} className="flex flex-col md:flex-row gap-2 mb-4">
                 <div className="flex gap-2 w-fit">
-                  <select
+                  <Select
+                    placeholder="Ingrediente"
                     value={ri.ingredient}
-                    onChange={(e) =>
-                      updateIngredientField(ri.id, "ingredient", e.target.value)
+                    onChange={(value) =>
+                      updateIngredientField(ri.id, "ingredient", value)
                     }
-                    className="border rounded px-3 py-2 w-1/2"
-                  >
-                    <option value="">Seleccionar</option>
-                    {ingredients.map((ing) => (
-                      <option key={ing.id} value={ing.id}>
-                        {ing.name}
-                      </option>
-                    ))}
-                  </select>
-                  <input
+                    options={ingredients.map((ing) => ({
+                      value: ing.id,
+                      label: ing.name,
+                    }))}
+                  />
+                  <Input
+                    placeholder="Cantidad"
                     type="number"
-                    step="0.01"
-                    value={ri.quantity}
-                    onChange={(e) =>
+                    value={ri.quantity.toString()}
+                    onChange={(value) =>
                       updateIngredientField(
                         ri.id,
                         "quantity",
-                        parseFloat(e.target.value)
+                        parseFloat(value)
                       )
                     }
-                    className="border rounded px-3 py-2 w-1/2"
-                    placeholder="Cant."
                   />
                 </div>
                 <div className="flex gap-2">
-                  <input
+                  <Input
+                    placeholder="Notas"
                     type="text"
                     value={ri.notes || ""}
-                    onChange={(e) =>
-                      updateIngredientField(ri.id, "notes", e.target.value)
+                    onChange={(value) =>
+                      updateIngredientField(ri.id, "notes", value)
                     }
-                    className="border rounded px-3 py-2 w-4/5"
-                    placeholder="Notas"
                   />
                   <button
                     type="button"
@@ -323,8 +293,8 @@ export default function RecipesClient() {
                   onClick={() => toggleTag(tag.id)}
                   className={`px-3 py-1 rounded ${
                     formData.tags.includes(tag.id)
-                      ? "bg-blue-600 text-white"
-                      : "bg-gray-200"
+                      ? "bg-complementary dark:bg-complementary-dark text-white"
+                      : "bg-gray-200 dark:bg-gray-800"
                   }`}
                 >
                   {tag.name}
