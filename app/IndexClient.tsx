@@ -41,12 +41,14 @@ export default function IndexClient({
         action={handleSubmit}
         className="flex flex-row items-center gap-2 w-3/4 md:w-1/2"
       >
-        <Input
-          type="password"
-          placeholder="Password"
-          value={token}
-          onChange={(value) => setToken(value)}
-        />
+        <div className="w-2/3 md:w-3/4">
+          <Input
+            type="password"
+            placeholder="Password"
+            value={token}
+            onChange={(value) => setToken(value)}
+          />
+        </div>
         <Button type="submit">
           <PiCookie />
         </Button>
