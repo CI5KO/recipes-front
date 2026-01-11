@@ -7,7 +7,7 @@ import { storageUtils } from "@/src/lib/storage";
 import { calculateRecipeCost } from "@/src/lib/recipeUtils";
 import { PiBowlFood } from "react-icons/pi";
 import { GiCookingPot } from "react-icons/gi";
-import { MdLabel } from "react-icons/md";
+import { MdLabel, MdImportExport } from "react-icons/md";
 
 export default function HomeClient() {
   const [recipes, setRecipes] = useState<Recipe[]>([]);
@@ -22,7 +22,15 @@ export default function HomeClient() {
 
   return (
     <div className="p-6">
-      <h1 className="text-3xl font-bold pb-6">Inicio</h1>
+      <div className="flex justify-between items-center pb-6">
+        <h1 className="text-3xl font-bold">Inicio</h1>
+        <Link
+          href="/dataTransfer"
+          className="flex items-center gap-2 bg-purple-600 hover:bg-purple-700 text-white px-4 py-2 rounded-lg font-semibold transition shadow"
+        >
+          <MdImportExport size={20} /> Importar/Exportar
+        </Link>
+      </div>
 
       <section className="mb-8">
         <div className="flex items-center gap-2 mb-4">
