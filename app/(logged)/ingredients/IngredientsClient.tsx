@@ -5,6 +5,13 @@ import { Ingredient } from "@/src/types";
 import { storageUtils } from "@/src/lib/storage";
 import { createIngredient, updateIngredient, deleteIngredient } from "@/src/services/ingredient.service";
 
+import Input from "@/src/components/atoms/Input";
+import Select from "@/src/components/atoms/Select";
+import Modal from "@/src/components/atoms/Modal";
+import IngredientCard from "@/src/components/molecules/IngredientCard";
+
+import { GiCookingPot } from "react-icons/gi";
+
 export default function IngredientsClient() {
   const [ingredients, setIngredients] = useState<Ingredient[]>([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -30,6 +37,10 @@ export default function IngredientsClient() {
       setIngredients(newIngredients);
       storageUtils.setIngredients(newIngredients);
     }
+    closeModal();
+  };
+
+  const closeModal = () => {
     setIsModalOpen(false);
     setFormData({ name: "", unitOfMeasure: "", pricePerUnit: 0 });
     setEditingIngredient(null);
@@ -50,63 +61,81 @@ export default function IngredientsClient() {
 
   return (
     <div className="p-6">
-      <div className="flex justify-between items-center mb-6">
-        <h1 className="text-3xl font-bold">Ingredientes</h1>
-        <button onClick={() => setIsModalOpen(true)} className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700">Crear Ingrediente</button>
-      </div>
+      <button
+        onClick={() => setIsModalOpen(true)}
+        className="fixed bg-complementary dark:bg-complementary-dark rounded-full p-4 border border-black bottom-4 right-4 cursor-pointer"
+      >
+        <GiCookingPot className="text-2xl text-black" />
+      </button>
+      <h1 className="text-3xl font-bold pb-4">Ingredientes</h1>
 
-      <div className="overflow-x-auto">
-        <table className="w-full border-collapse border">
-          <thead>
-            <tr className="bg-gray-100">
-              <th className="border p-2 text-black">Nombre</th>
-              <th className="border p-2 text-black">Unidad</th>
-              <th className="border p-2 text-black">Precio</th>
-              <th className="border p-2 text-black">Acciones</th>
-            </tr>
-          </thead>
-          <tbody>
-            {ingredients.map(ingredient => (
-              <tr key={ingredient.id}>
-                <td className="border p-2">{ingredient.name}</td>
-                <td className="border p-2">{ingredient.unitOfMeasure}</td>
-                <td className="border p-2">${ingredient.pricePerUnit}</td>
-                <td className="border p-2">
-                  <div className="flex gap-2 justify-center">
-                    <button onClick={() => handleEdit(ingredient)} className="bg-yellow-500 text-white px-3 py-1 rounded hover:bg-yellow-600">Editar</button>
-                    <button onClick={() => handleDelete(ingredient.id)} className="bg-red-600 text-white px-3 py-1 rounded hover:bg-red-700">Eliminar</button>
-                  </div>
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+        {ingredients.map((ingredient) => (
+          <IngredientCard
+            key={ingredient.id}
+            ingredient={ingredient}
+            onEdit={handleEdit}
+            onDelete={handleDelete}
+          />
+        ))}
       </div>
 
       {isModalOpen && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-          <div className="bg-white rounded-lg p-6 w-full max-w-md">
-            <h2 className="text-2xl font-bold mb-4 text-black">{editingIngredient ? "Editar Ingrediente" : "Crear Ingrediente"}</h2>
-            <form onSubmit={handleSubmit}>
-              <div className="mb-4">
-                <label className="block mb-2 text-black">Nombre</label>
-                <input type="text" value={formData.name} onChange={e => setFormData({...formData, name: e.target.value})} className="w-full border rounded px-3 py-2 text-black" required />
-              </div>
-              <div className="mb-4">
-                <label className="block mb-2 text-black">Unidad de Medida</label>
-                <input type="text" value={formData.unitOfMeasure} onChange={e => setFormData({...formData, unitOfMeasure: e.target.value})} className="w-full border rounded px-3 py-2 text-black" required />
-              </div>
-              <div className="mb-4">
-                <label className="block mb-2 text-black">Precio por Unidad</label>
-                <input type="number" step="0.01" value={formData.pricePerUnit} onChange={e => setFormData({...formData, pricePerUnit: parseFloat(e.target.value)})} className="w-full border rounded px-3 py-2 text-black" required />
-              </div>
-              <div className="flex gap-2">
-                <button type="submit" className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700">Guardar</button>
-                <button type="button" onClick={() => { setIsModalOpen(false); setEditingIngredient(null); setFormData({ name: "", unitOfMeasure: "", pricePerUnit: 0 }); }} className="bg-gray-500 text-white px-4 py-2 rounded hover:bg-gray-600">Cancelar</button>
-              </div>
-            </form>
-          </div>
-        </div>
+        <Modal isOpen={isModalOpen} onClose={closeModal}>
+          <h2 className="text-xl font-semibold">
+            {editingIngredient ? "Editar" : "Crear"} Ingrediente
+          </h2>
+          <form
+            onSubmit={handleSubmit}
+            className="max-h-[70vh] overflow-y-auto space-y-4 pt-4"
+          >
+            <Input
+              placeholder="Nombre"
+              type="text"
+              value={formData.name}
+              onChange={(value) => setFormData({ ...formData, name: value })}
+            />
+            <Select
+              placeholder="Unidad de Medida"
+              value={formData.unitOfMeasure}
+              onChange={(value) => setFormData({ ...formData, unitOfMeasure: value })}
+              options={[
+                { value: "Kilogramo", label: "Kilogramo" },
+                { value: "Gramos", label: "Gramos" },
+                { value: "Litros", label: "Litros" },
+                { value: "Mililitros", label: "Mililitros" },
+                { value: "Unidades", label: "Unidades" },
+                { value: "Cucharadas", label: "Cucharadas" },
+                { value: "Cucharaditas", label: "Cucharaditas" },
+                { value: "Tazas", label: "Tazas" },
+                { value: "Pizca", label: "Pizca" },
+                { value: "Onzas", label: "Onzas" },
+                { value: "Libras", label: "Libras" },
+              ]}
+            />
+            <Input
+              placeholder="Precio por Unidad"
+              type="number"
+              value={formData.pricePerUnit.toString()}
+              onChange={(value) => setFormData({ ...formData, pricePerUnit: parseFloat(value) || 0 })}
+            />
+            <div className="flex gap-2 w-full">
+              <button
+                type="submit"
+                className="bg-pink-500 text-white px-4 py-2 rounded hover:bg-pink-700 w-full"
+              >
+                Guardar
+              </button>
+              <button
+                type="button"
+                onClick={closeModal}
+                className="bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600 w-full"
+              >
+                Cancelar
+              </button>
+            </div>
+          </form>
+        </Modal>
       )}
     </div>
   );
