@@ -171,29 +171,42 @@ export default function DataTransferClient() {
 
   const startQrScanner = async () => {
     setShowQrScanner(true);
-    try {
-      const scanner = new Html5Qrcode("qr-reader");
-      scannerRef.current = scanner;
+    setTimeout(async () => {
+      try {
+        const scanner = new Html5Qrcode("qr-reader");
+        scannerRef.current = scanner;
 
-      await scanner.start(
-        { facingMode: "environment" },
-        { fps: 10, qrbox: 250 },
-        (decodedText) => {
-          stopQrScanner();
-          processQrData(decodedText);
-        },
-        () => {}
-      );
-    } catch (error) {
-      showNotification("Error al acceder a la cámara");
-      setShowQrScanner(false);
-    }
+        const cameras = await Html5Qrcode.getCameras();
+        if (cameras && cameras.length > 0) {
+          await scanner.start(
+            cameras[0].id,
+            { fps: 10, qrbox: { width: 250, height: 250 } },
+            (decodedText) => {
+              stopQrScanner();
+              processQrData(decodedText);
+            },
+            () => {}
+          );
+        } else {
+          showNotification("No se encontró ninguna cámara");
+          setShowQrScanner(false);
+        }
+      } catch (error) {
+        console.error("Error al iniciar escáner:", error);
+        showNotification("Error al acceder a la cámara. Verifica los permisos.");
+        setShowQrScanner(false);
+      }
+    }, 100);
   };
 
   const stopQrScanner = () => {
     if (scannerRef.current) {
       scannerRef.current.stop().then(() => {
+        scannerRef.current?.clear();
         scannerRef.current = null;
+        setShowQrScanner(false);
+      }).catch((err) => {
+        console.error("Error al detener escáner:", err);
         setShowQrScanner(false);
       });
     }
