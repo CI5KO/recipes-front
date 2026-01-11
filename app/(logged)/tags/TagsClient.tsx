@@ -14,7 +14,11 @@ export default function TagsClient() {
   const [tags, setTags] = useState<Tag[]>([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [editingTag, setEditingTag] = useState<Tag | null>(null);
-  const [formData, setFormData] = useState({ name: "", type: "", color: "#000000" });
+  const [formData, setFormData] = useState({
+    name: "",
+    type: "",
+    color: "#000000",
+  });
 
   useEffect(() => {
     setTags(storageUtils.getTags());
@@ -25,7 +29,7 @@ export default function TagsClient() {
     if (editingTag) {
       const updated = await updateTag(editingTag.id, formData);
       if (updated) {
-        const newTags = tags.map(t => t.id === editingTag.id ? updated : t);
+        const newTags = tags.map((t) => (t.id === editingTag.id ? updated : t));
         setTags(newTags);
         storageUtils.setTags(newTags);
       }
@@ -52,7 +56,7 @@ export default function TagsClient() {
 
   const handleDelete = async (id: string) => {
     await deleteTag(id);
-    const newTags = tags.filter(t => t.id !== id);
+    const newTags = tags.filter((t) => t.id !== id);
     setTags(newTags);
     storageUtils.setTags(newTags);
   };
@@ -61,22 +65,31 @@ export default function TagsClient() {
     <div className="p-6">
       <button
         onClick={() => setIsModalOpen(true)}
-        className="fixed bg-complementary dark:bg-complementary-dark rounded-full p-4 border border-black bottom-4 right-4 cursor-pointer"
+        className={`${
+          tags.length === 0 && "animate-pulse"
+        } fixed bg-complementary dark:bg-complementary-dark rounded-full p-4 border border-black bottom-4 right-4 cursor-pointer`}
       >
         <MdLocalOffer className="text-2xl text-black" />
       </button>
       <h1 className="text-3xl font-bold pb-4">Tags</h1>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-        {tags.map(tag => (
-          <TagCard
-            key={tag.id}
-            tag={tag}
-            onEdit={handleEdit}
-            onDelete={handleDelete}
-          />
-        ))}
-      </div>
+      {tags.length === 0 ? (
+        <p className="text-justify mt-8">
+          No hay tags disponibles. Para agregar un nuevo tag, haz clic en el
+          ícono en la parte inferior derecha.
+        </p>
+      ) : (
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+          {tags.map((tag) => (
+            <TagCard
+              key={tag.id}
+              tag={tag}
+              onEdit={handleEdit}
+              onDelete={handleDelete}
+            />
+          ))}
+        </div>
+      )}
 
       {isModalOpen && (
         <Modal isOpen={isModalOpen} onClose={closeModal}>

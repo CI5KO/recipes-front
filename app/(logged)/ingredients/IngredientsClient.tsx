@@ -3,7 +3,11 @@
 import { useState, useEffect } from "react";
 import { Ingredient } from "@/src/types";
 import { storageUtils } from "@/src/lib/storage";
-import { createIngredient, updateIngredient, deleteIngredient } from "@/src/services/ingredient.service";
+import {
+  createIngredient,
+  updateIngredient,
+  deleteIngredient,
+} from "@/src/services/ingredient.service";
 
 import Input from "@/src/components/atoms/Input";
 import Select from "@/src/components/atoms/Select";
@@ -15,8 +19,14 @@ import { GiCookingPot } from "react-icons/gi";
 export default function IngredientsClient() {
   const [ingredients, setIngredients] = useState<Ingredient[]>([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [editingIngredient, setEditingIngredient] = useState<Ingredient | null>(null);
-  const [formData, setFormData] = useState({ name: "", unitOfMeasure: "", pricePerUnit: 0 });
+  const [editingIngredient, setEditingIngredient] = useState<Ingredient | null>(
+    null
+  );
+  const [formData, setFormData] = useState({
+    name: "",
+    unitOfMeasure: "",
+    pricePerUnit: 0,
+  });
 
   useEffect(() => {
     setIngredients(storageUtils.getIngredients());
@@ -27,7 +37,9 @@ export default function IngredientsClient() {
     if (editingIngredient) {
       const updated = await updateIngredient(editingIngredient.id, formData);
       if (updated) {
-        const newIngredients = ingredients.map(i => i.id === editingIngredient.id ? updated : i);
+        const newIngredients = ingredients.map((i) =>
+          i.id === editingIngredient.id ? updated : i
+        );
         setIngredients(newIngredients);
         storageUtils.setIngredients(newIngredients);
       }
@@ -48,13 +60,17 @@ export default function IngredientsClient() {
 
   const handleEdit = (ingredient: Ingredient) => {
     setEditingIngredient(ingredient);
-    setFormData({ name: ingredient.name, unitOfMeasure: ingredient.unitOfMeasure, pricePerUnit: ingredient.pricePerUnit });
+    setFormData({
+      name: ingredient.name,
+      unitOfMeasure: ingredient.unitOfMeasure,
+      pricePerUnit: ingredient.pricePerUnit,
+    });
     setIsModalOpen(true);
   };
 
   const handleDelete = async (id: string) => {
     await deleteIngredient(id);
-    const newIngredients = ingredients.filter(i => i.id !== id);
+    const newIngredients = ingredients.filter((i) => i.id !== id);
     setIngredients(newIngredients);
     storageUtils.setIngredients(newIngredients);
   };
@@ -63,22 +79,31 @@ export default function IngredientsClient() {
     <div className="p-6">
       <button
         onClick={() => setIsModalOpen(true)}
-        className="fixed bg-complementary dark:bg-complementary-dark rounded-full p-4 border border-black bottom-4 right-4 cursor-pointer"
+        className={`${
+          ingredients.length === 0 && "animate-pulse"
+        } fixed bg-complementary dark:bg-complementary-dark rounded-full p-4 border border-black bottom-4 right-4 cursor-pointer`}
       >
         <GiCookingPot className="text-2xl text-black" />
       </button>
       <h1 className="text-3xl font-bold pb-4">Ingredientes</h1>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-        {ingredients.map((ingredient) => (
-          <IngredientCard
-            key={ingredient.id}
-            ingredient={ingredient}
-            onEdit={handleEdit}
-            onDelete={handleDelete}
-          />
-        ))}
-      </div>
+      {ingredients.length === 0 ? (
+        <p className="text-justify mt-8">
+          No hay ingredientes disponibles. Para agregar un nuevo ingrediente,
+          haz clic en el ícono en la parte inferior derecha.
+        </p>
+      ) : (
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+          {ingredients.map((ingredient) => (
+            <IngredientCard
+              key={ingredient.id}
+              ingredient={ingredient}
+              onEdit={handleEdit}
+              onDelete={handleDelete}
+            />
+          ))}
+        </div>
+      )}
 
       {isModalOpen && (
         <Modal isOpen={isModalOpen} onClose={closeModal}>
@@ -98,7 +123,9 @@ export default function IngredientsClient() {
             <Select
               placeholder="Unidad de Medida"
               value={formData.unitOfMeasure}
-              onChange={(value) => setFormData({ ...formData, unitOfMeasure: value })}
+              onChange={(value) =>
+                setFormData({ ...formData, unitOfMeasure: value })
+              }
               options={[
                 { value: "Kilogramo", label: "Kilogramo" },
                 { value: "Gramos", label: "Gramos" },
@@ -117,7 +144,12 @@ export default function IngredientsClient() {
               placeholder="Precio por Unidad"
               type="number"
               value={formData.pricePerUnit.toString()}
-              onChange={(value) => setFormData({ ...formData, pricePerUnit: parseFloat(value) || 0 })}
+              onChange={(value) =>
+                setFormData({
+                  ...formData,
+                  pricePerUnit: parseFloat(value) || 0,
+                })
+              }
             />
             <div className="flex gap-2 w-full">
               <button

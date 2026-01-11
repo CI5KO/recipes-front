@@ -142,26 +142,35 @@ export default function RecipesClient() {
     <div className="p-6">
       <button
         onClick={() => setIsModalOpen(true)}
-        className="fixed bg-complementary dark:bg-complementary-dark rounded-full p-4 border border-black bottom-4 right-4 cursor-pointer"
+        className={`${
+          recipes.length === 0 && "animate-pulse"
+        } fixed bg-complementary dark:bg-complementary-dark rounded-full p-4 border border-black bottom-4 right-4 cursor-pointer`}
       >
         <PiBowlFood className="text-2xl text-black" />
       </button>
       <h1 className="text-3xl font-bold pb-4">Recetas</h1>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-        {recipes.map((recipe) => (
-          <RecipeCard
-            key={recipe.id}
-            recipe={recipe}
-            onEdit={handleEdit}
-            onDelete={handleDelete}
-            onClick={(id) => router.push(`/recipes/${id}`)}
-            getIngredientName={getIngredientName}
-            getTagName={getTagName}
-            ingredients={ingredients}
-          />
-        ))}
-      </div>
+      {recipes.length === 0 ? (
+        <p className="text-justify mt-8">
+          No hay recetas disponibles. Para agregar una nueva receta, haz clic en
+          el ícono en la parte inferior derecha.
+        </p>
+      ) : (
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+          {recipes.map((recipe) => (
+            <RecipeCard
+              key={recipe.id}
+              recipe={recipe}
+              onEdit={handleEdit}
+              onDelete={handleDelete}
+              onClick={(id) => router.push(`/recipes/${id}`)}
+              getIngredientName={getIngredientName}
+              getTagName={getTagName}
+              ingredients={ingredients}
+            />
+          ))}
+        </div>
+      )}
 
       {isModalOpen && (
         <Modal isOpen={isModalOpen} onClose={closeModal}>

@@ -24,7 +24,7 @@ export default function Input({
         <label
           className={`absolute ml-1 ${
             isFocused || value ? "-top-3" : "top-[10px]"
-          } text-sm left-2 transition-all select-none bg-gradient-to-t from-primary dark:from-primary-dark from-50% to-50% to-transparent`}
+          } text-sm left-2 transition-all select-none pointer-events-none bg-gradient-to-t from-primary dark:from-primary-dark from-50% to-50% to-transparent`}
         >
           {placeholder}
         </label>

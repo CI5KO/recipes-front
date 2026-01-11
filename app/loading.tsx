@@ -3,7 +3,13 @@ import Image from "next/image";
 export default function Loading() {
   return (
     <div className="flex justify-center items-center min-h-screen">
-      <Image src="/loader.svg" alt="Loading..." width={100} height={100} />
+      <Image
+        src="/loader.svg"
+        alt="Loading..."
+        width={100}
+        height={100}
+        className="animate-pulse"
+      />
     </div>
   );
 }

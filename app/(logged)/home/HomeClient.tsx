@@ -26,7 +26,7 @@ export default function HomeClient() {
         <h1 className="text-3xl font-bold">Inicio</h1>
         <Link
           href="/dataTransfer"
-          className="flex items-center gap-2 bg-purple-600 hover:bg-purple-700 text-white px-4 py-2 rounded-lg font-semibold transition shadow"
+          className="flex items-center gap-2 bg-complementary dark:bg-complementary-dark text-white px-4 py-2 rounded-lg font-semibold transition shadow"
         >
           <MdImportExport size={20} /> Importar/Exportar
         </Link>
@@ -35,14 +35,20 @@ export default function HomeClient() {
       <section className="mb-8">
         <div className="flex items-center gap-2 mb-4">
           <PiBowlFood className="text-2xl" />
-          <Link href="/recipes" className="text-2xl font-semibold hover:text-pink-500 transition">
+          <Link
+            href="/recipes"
+            className="text-2xl font-semibold hover:text-pink-500 transition"
+          >
             Recetas Recientes
           </Link>
         </div>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
           {recipes.length > 0 ? (
             recipes.map((recipe) => {
-              const totalCost = calculateRecipeCost(recipe, storageUtils.getIngredients());
+              const totalCost = calculateRecipeCost(
+                recipe,
+                storageUtils.getIngredients()
+              );
               return (
                 <Link
                   key={recipe.id}
@@ -64,7 +70,9 @@ export default function HomeClient() {
               );
             })
           ) : (
-            <p className="text-gray-500 dark:text-gray-400 col-span-full">No hay recetas disponibles</p>
+            <p className="text-gray-500 dark:text-gray-400 col-span-full">
+              No hay recetas disponibles
+            </p>
           )}
         </div>
         <Link
@@ -78,7 +86,10 @@ export default function HomeClient() {
       <section className="mb-8">
         <div className="flex items-center gap-2 mb-4">
           <GiCookingPot className="text-2xl" />
-          <Link href="/ingredients" className="text-2xl font-semibold hover:text-pink-500 transition">
+          <Link
+            href="/ingredients"
+            className="text-2xl font-semibold hover:text-pink-500 transition"
+          >
             Ingredientes
           </Link>
         </div>
@@ -96,7 +107,9 @@ export default function HomeClient() {
               </div>
             ))
           ) : (
-            <p className="text-gray-500 dark:text-gray-400 col-span-full">No hay ingredientes disponibles</p>
+            <p className="text-gray-500 dark:text-gray-400 col-span-full">
+              No hay ingredientes disponibles
+            </p>
           )}
         </div>
         <Link
@@ -110,7 +123,10 @@ export default function HomeClient() {
       <section>
         <div className="flex items-center gap-2 mb-4">
           <MdLabel className="text-2xl" />
-          <Link href="/tags" className="text-2xl font-semibold hover:text-pink-500 transition">
+          <Link
+            href="/tags"
+            className="text-2xl font-semibold hover:text-pink-500 transition"
+          >
             Tags
           </Link>
         </div>
@@ -129,7 +145,9 @@ export default function HomeClient() {
               </div>
             ))
           ) : (
-            <p className="text-gray-500 dark:text-gray-400">No hay tags disponibles</p>
+            <p className="text-gray-500 dark:text-gray-400">
+              No hay tags disponibles
+            </p>
           )}
         </div>
         <Link
