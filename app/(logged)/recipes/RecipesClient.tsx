@@ -158,6 +158,7 @@ export default function RecipesClient() {
             onClick={(id) => router.push(`/recipes/${id}`)}
             getIngredientName={getIngredientName}
             getTagName={getTagName}
+            ingredients={ingredients}
           />
         ))}
       </div>

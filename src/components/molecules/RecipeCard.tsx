@@ -1,5 +1,6 @@
-import { Recipe } from "@/src/types";
+import { Recipe, Ingredient } from "@/src/types";
 import { MdEdit, MdDelete } from "react-icons/md";
+import { calculateRecipeCost } from "@/src/lib/recipeUtils";
 
 interface RecipeCardProps {
   recipe: Recipe;
@@ -8,6 +9,7 @@ interface RecipeCardProps {
   onClick: (id: string) => void;
   getIngredientName: (id: string) => string;
   getTagName: (id: string) => string;
+  ingredients: Ingredient[];
 }
 
 export default function RecipeCard({
@@ -17,7 +19,10 @@ export default function RecipeCard({
   onClick,
   getIngredientName,
   getTagName,
+  ingredients,
 }: RecipeCardProps) {
+  const totalCost = calculateRecipeCost(recipe, ingredients);
+
   return (
     <div
       className="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg p-6 shadow-sm hover:shadow-md transition-shadow cursor-pointer"
@@ -30,7 +35,7 @@ export default function RecipeCard({
         {recipe.description}
       </p>
 
-      <div className="grid grid-cols-3 gap-2 mb-4 text-sm">
+      <div className="grid grid-cols-2 gap-2 mb-4 text-sm">
         <div className="bg-gray-50 dark:bg-gray-700 p-2 rounded">
           <p className="text-gray-500 dark:text-gray-400 text-xs">Tiempo</p>
           <p className="font-semibold dark:text-gray-100">
@@ -46,6 +51,12 @@ export default function RecipeCard({
         <div className="bg-gray-50 dark:bg-gray-700 p-2 rounded">
           <p className="text-gray-500 dark:text-gray-400 text-xs">Porciones</p>
           <p className="font-semibold dark:text-gray-100">{recipe.servings}</p>
+        </div>
+        <div className="bg-green-50 dark:bg-green-900 p-2 rounded">
+          <p className="text-gray-500 dark:text-gray-400 text-xs">Costo Total</p>
+          <p className="font-semibold text-green-700 dark:text-green-300">
+            ${totalCost.toFixed(2)}
+          </p>
         </div>
       </div>
 
