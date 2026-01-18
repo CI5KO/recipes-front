@@ -17,7 +17,7 @@ export interface Session {
 export async function getSession(): Promise<Session | null> {
   const cookieStore = await cookies();
   const sessionCookie = cookieStore.get(
-    process.env.COOKIE_NAME || "cooking-cat"
+    process.env.COOKIE_NAME || "cooking-cat",
   );
 
   if (!sessionCookie) return null;
@@ -38,8 +38,8 @@ export async function setSession(session: Session) {
       httpOnly: true,
       secure: process.env.NODE_ENV === "production",
       sameSite: "lax",
-      maxAge: 60 * 60 * 24 * 7, // 7 días
-    }
+      maxAge: 60 * 60 * 24 * 365, // 365 días
+    },
   );
 }
 

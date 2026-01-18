@@ -20,7 +20,7 @@ export default function IngredientsClient() {
   const [ingredients, setIngredients] = useState<Ingredient[]>([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [editingIngredient, setEditingIngredient] = useState<Ingredient | null>(
-    null
+    null,
   );
   const [formData, setFormData] = useState({
     name: "",
@@ -38,7 +38,7 @@ export default function IngredientsClient() {
       const updated = await updateIngredient(editingIngredient.id, formData);
       if (updated) {
         const newIngredients = ingredients.map((i) =>
-          i.id === editingIngredient.id ? updated : i
+          i.id === editingIngredient.id ? updated : i,
         );
         setIngredients(newIngredients);
         storageUtils.setIngredients(newIngredients);
@@ -112,7 +112,7 @@ export default function IngredientsClient() {
           </h2>
           <form
             onSubmit={handleSubmit}
-            className="max-h-[70vh] overflow-y-auto space-y-4 pt-4"
+            className="max-h-[70vh] overflow-y-auto space-y-6 pt-4"
           >
             <Input
               placeholder="Nombre"

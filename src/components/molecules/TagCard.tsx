@@ -20,11 +20,6 @@ export default function TagCard({ tag, onEdit, onDelete }: TagCardProps) {
         </h3>
       </div>
 
-      <div className="bg-gray-50 dark:bg-gray-700 p-3 rounded mb-4">
-        <p className="text-gray-500 dark:text-gray-400 text-xs mb-1">Tipo</p>
-        <p className="font-semibold dark:text-gray-100">{tag.type}</p>
-      </div>
-
       <div className="grid grid-cols-2 w-full gap-2 pt-3 border-t dark:border-gray-700">
         <button
           onClick={() => onEdit(tag)}

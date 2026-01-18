@@ -50,7 +50,7 @@ export default function RecipesClient() {
       const updated = await updateRecipe(editingRecipe.id, formData);
       if (updated) {
         const newRecipes = recipes.map((r) =>
-          r.id === editingRecipe.id ? updated : r
+          r.id === editingRecipe.id ? updated : r,
         );
         setRecipes(newRecipes);
         storageUtils.setRecipes(newRecipes);
@@ -106,7 +106,7 @@ export default function RecipesClient() {
     setFormData({
       ...formData,
       recipeIngredients: formData.recipeIngredients.filter(
-        (ri) => ri.id !== id
+        (ri) => ri.id !== id,
       ),
     });
   };
@@ -114,12 +114,12 @@ export default function RecipesClient() {
   const updateIngredientField = (
     id: string,
     field: keyof RecipeIngredient,
-    value: any
+    value: any,
   ) => {
     setFormData({
       ...formData,
       recipeIngredients: formData.recipeIngredients.map((ri) =>
-        ri.id === id ? { ...ri, [field]: value } : ri
+        ri.id === id ? { ...ri, [field]: value } : ri,
       ),
     });
   };
@@ -179,7 +179,7 @@ export default function RecipesClient() {
           </h2>
           <form
             onSubmit={handleSubmit}
-            className="max-h-[70vh] overflow-y-auto space-y-4 pt-4"
+            className="max-h-[70vh] overflow-y-auto space-y-6 pt-4"
           >
             <Input
               placeholder="Nombre"
@@ -201,7 +201,24 @@ export default function RecipesClient() {
                 setFormData({ ...formData, instructions: value })
               }
             />
-            <div className="grid grid-cols-3 gap-4">
+            <div className="grid grid-cols-2 gap-4">
+              <div className="col-span-2">
+                <Select
+                  placeholder="Dificultad"
+                  value={formData.difficulty}
+                  onChange={(value) =>
+                    setFormData({
+                      ...formData,
+                      difficulty: value,
+                    })
+                  }
+                  options={[
+                    { value: "Facil", label: "Facil" },
+                    { value: "Intermedio", label: "Intermedio" },
+                    { value: "Dificil", label: "Dificil" },
+                  ]}
+                />
+              </div>
               <Input
                 placeholder="Tiempo (min)"
                 type="number"
@@ -212,21 +229,6 @@ export default function RecipesClient() {
                     preparationTime: parseInt(value),
                   })
                 }
-              />
-              <Select
-                placeholder="Dificultad"
-                value={formData.difficulty}
-                onChange={(value) =>
-                  setFormData({
-                    ...formData,
-                    difficulty: value,
-                  })
-                }
-                options={[
-                  { value: "Facil", label: "Facil" },
-                  { value: "Intermedio", label: "Intermedio" },
-                  { value: "Dificil", label: "Dificil" },
-                ]}
               />
               <Input
                 placeholder="Porciones"
@@ -270,7 +272,7 @@ export default function RecipesClient() {
                       updateIngredientField(
                         ri.id,
                         "quantity",
-                        parseFloat(value)
+                        parseFloat(value),
                       )
                     }
                   />

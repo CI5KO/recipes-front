@@ -16,7 +16,6 @@ export default function TagsClient() {
   const [editingTag, setEditingTag] = useState<Tag | null>(null);
   const [formData, setFormData] = useState({
     name: "",
-    type: "",
     color: "#000000",
   });
 
@@ -44,13 +43,13 @@ export default function TagsClient() {
 
   const closeModal = () => {
     setIsModalOpen(false);
-    setFormData({ name: "", type: "", color: "#000000" });
+    setFormData({ name: "", color: "#000000" });
     setEditingTag(null);
   };
 
   const handleEdit = (tag: Tag) => {
     setEditingTag(tag);
-    setFormData({ name: tag.name, type: tag.type, color: tag.color });
+    setFormData({ name: tag.name, color: tag.color });
     setIsModalOpen(true);
   };
 
@@ -102,12 +101,6 @@ export default function TagsClient() {
               type="text"
               value={formData.name}
               onChange={(value) => setFormData({ ...formData, name: value })}
-            />
-            <Input
-              placeholder="Tipo"
-              type="text"
-              value={formData.type}
-              onChange={(value) => setFormData({ ...formData, type: value })}
             />
             <ColorPicker
               value={formData.color}
