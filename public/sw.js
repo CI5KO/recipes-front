@@ -1,4 +1,4 @@
-const CACHE_NAME = 'cooking-cat-v2';
+const CACHE_NAME = 'cooking-cat-v3';
 
 self.addEventListener('install', (event) => {
   event.waitUntil(
@@ -33,6 +33,9 @@ self.addEventListener('fetch', (event) => {
 
   // Skip chrome extensions and external requests
   if (!url.origin.includes(self.location.origin)) return;
+
+  // Skip server actions and API routes
+  if (url.pathname.startsWith('/api/') || request.headers.get('Next-Action')) return;
 
   event.respondWith(
     caches.match(request).then((cached) => {
