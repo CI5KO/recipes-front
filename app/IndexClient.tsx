@@ -8,20 +8,15 @@ import Button from "@/src/components/atoms/Button";
 import { PiCookie } from "react-icons/pi";
 import Notification from "@/src/components/atoms/Notification";
 import ThemeSwitcher from "@/src/components/molecules/ThemeSwitcher";
+import { validateTokenAction } from "./actions";
 
-interface IndexClientProps {
-  validateToken: (token: string) => Promise<boolean>;
-}
-
-export default function IndexClient({
-  validateToken,
-}: IndexClientProps): ReactNode {
+export default function IndexClient(): ReactNode {
   const router = useRouter();
   const [token, setToken] = useState<string>("");
   const [showNotification, setShowNotification] = useState<boolean>(false);
 
   const handleSubmit = async () => {
-    const isValid: boolean = await validateToken(token);
+    const isValid: boolean = await validateTokenAction(token);
     if (isValid) router.push("/home");
     else setShowNotification(true);
   };
